@@ -3522,7 +3522,8 @@ button:disabled,
   width: 100%;
 }
 
-@media screen and (orientation: portrait) {
+/* edited (added `and (max-width: 800px)` ) */
+@media screen and (orientation: portrait) and (max-width: 800px) {
   #banner {
     -moz-flex-direction: column-reverse;
     -webkit-flex-direction: column-reverse;
@@ -3560,6 +3561,16 @@ button:disabled,
     max-height: 50vh;
     min-height: 18em;
     width: 100%;
+  }
+
+  /* edited (added) */
+  #banner .profile1 {
+    min-height: 40em;
+  }
+
+  /* edited (added) */
+  #banner .profile2 {
+    height: 100%;
   }
 }
 
@@ -3733,7 +3744,8 @@ button:disabled,
   width: 100%;
 }
 
-@media screen and (orientation: portrait) {
+/* edited (added `and (max-width: 800px)` ) */
+@media screen and (orientation: portrait) and (max-width: 800px) {
   #bannerabout {
     -moz-flex-direction: column-reverse;
     -webkit-flex-direction: column-reverse;
