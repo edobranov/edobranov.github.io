@@ -3559,8 +3559,13 @@ button:disabled,
   }
 
   /* edited (added) */
-  #banner .profile1 {
+  #banner .profile0 {
     min-height: 40em;
+  }
+
+  /* edited (added) */
+  #banner .profile1 {
+    min-height: 50em;
   }
 
   /* edited (added) */
@@ -3572,6 +3577,19 @@ button:disabled,
 @media screen and (orientation: portrait) and (max-width: 480px) {
   #banner .image {
     max-height: 35vh;
+  }
+
+  /* edited (added) */
+  #banner .profile0 {
+    background-position: 50% 90% !important;
+    min-height: auto;
+  }
+
+  /* edited (added) */
+  #banner .profile1 {
+    min-height: auto;
+    max-height: none;
+    height: 100%;
   }
 }
 
