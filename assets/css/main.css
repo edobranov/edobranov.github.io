@@ -3436,13 +3436,8 @@ button:disabled,
 }
 
 /* edited (added) */
-#header span {
-  text-align: right;
-}
-
-/* edited (added) */
 #header img {
-  height: 30px;
+  height: 90px;
 }
 
 @media screen and (max-width: 1680px) {
