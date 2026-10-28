@@ -1,0 +1,300 @@
+---
+import "@fontsource-variable/inter";
+import "@fontsource-variable/roboto-flex/wdth.css";
+import "../styles/global.css";
+import { Image, getImage } from "astro:assets";
+import Icon from "../components/Icon.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import logo from "../assets/images/logo.jpg";
+import { getConcerts, getSite, concertHref } from "../lib/content";
+import { linkAttrs } from "../lib/format";
+
+interface Props {
+  /** Page name; the site name is appended. Omit on the home page. */
+  title?: string;
+  description?: string;
+  /** The menu link to highlight, e.g. "/past-concerts" on a concert page. */
+  current: string;
+  /** Social preview image. */
+  image?: ImageMetadata;
+  /** Ask search engines not to list this page. */
+  noindex?: boolean;
+}
+
+const { title, description, current, image, noindex = false } = Astro.props;
+const site = await getSite();
+const concerts = await getConcerts();
+
+const pageTitle = title ? `${title} · ${site.name}` : site.name;
+const metaDescription = description ?? site.description;
+const ogImage = image ? (await getImage({ src: image, width: 1200, format: "jpg" })).src : undefined;
+
+const groups = site.nav.filter((n) => n.children);
+const singles = site.nav.filter((n) => !n.children);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={metaDescription} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/favicon.png" />
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/(index)?\.html$/, ""), Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={metaDescription} />
+    {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site)} />}
+    <script is:inline>
+      // Apply a saved light/dark choice before first paint. Without one, the device setting wins.
+      try {
+        var t = localStorage.getItem("gd-theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar" id="topbar">
+      <div class="wrap-wide topbar-inner">
+        <a class="brand" href="/" aria-label={`${site.name} home`}>
+          <Image class="logo" src={logo} alt="" width={154} densities={[1, 2]} loading="eager" />
+        </a>
+        <nav class="mainnav" aria-label="Main">
+          {
+            site.nav.map((item) =>
+              item.children ? (
+                <div class="nav-group">
+                  <button
+                    class:list={["nav-link nav-trigger", { "is-active": item.children.some((c) => c.href === current) }]}
+                    type="button"
+                    aria-expanded="false"
+                  >
+                    {item.label}
+                    <Icon name="chev" />
+                  </button>
+                  <div class="nav-menu">
+                    <div class="nav-menu-inner">
+                      {item.children.map((c) => (
+                        <a
+                          href={c.href}
+                          class:list={{ "is-active": c.href === current }}
+                          aria-current={c.href === current ? "page" : undefined}
+                        >
+                          {c.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  class:list={["nav-link", { "is-active": item.href === current }]}
+                  href={item.href}
+                  aria-current={item.href === current ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              ),
+            )
+          }
+        </nav>
+        <div class="topbar-actions">
+          <ThemeToggle />
+          <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="overlay">
+            <Icon name="menu" />
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="wrap">
+        <div class="overlay-top">
+          <a class="brand" href="/" aria-label={`${site.name} home`}>
+            <Image class="logo" src={logo} alt="" width={134} densities={[1, 2]} />
+          </a>
+          <button class="icon-btn" type="button" id="menuClose" aria-label="Close menu"><Icon name="x" /></button>
+        </div>
+      </div>
+      <nav class="wrap overlay-nav" aria-label="Main">
+        {
+          site.nav.map((item) =>
+            item.children ? (
+              <div>
+                <p class="ov-label">{item.label}</p>
+                {item.children.map((c) => (
+                  <a
+                    class:list={["ov-link", { "is-active": c.href === current }]}
+                    href={c.href}
+                    aria-current={c.href === current ? "page" : undefined}
+                  >
+                    {c.label}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div>
+                <a
+                  class:list={["ov-link", { "is-active": item.href === current }]}
+                  href={item.href}
+                  aria-current={item.href === current ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </div>
+            ),
+          )
+        }
+      </nav>
+      <div class="wrap overlay-contact">
+        {
+          site.contact.map((c) => (
+            <a href={c.href} {...linkAttrs(c.href)}>
+              <Icon name={c.kind} />
+              <span>{c.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div class="f-brand">
+          <Image src={logo} alt={site.name} width={212} densities={[1, 2]} />
+          <p>{site.footer}</p>
+          <ThemeToggle />
+        </div>
+        <nav class="f-nav" aria-label="Footer">
+          {
+            groups.map((g) => (
+              <div class="f-col">
+                <h3>{g.label}</h3>
+                {g.children!.map((c) => (
+                  <a href={c.href}>{c.label}</a>
+                ))}
+              </div>
+            ))
+          }
+          <div class="f-col">
+            <h3>Explore</h3>
+            {singles.map((c) => <a href={c.href}>{c.label}</a>)}
+          </div>
+          <div class="f-col">
+            <h3>Past Concerts</h3>
+            {concerts.map((c) => <a href={concertHref(c.id)}>{c.data.title}</a>)}
+          </div>
+        </nav>
+        <div class="f-col f-contact">
+          <h3>Contact</h3>
+          {
+            site.contact.map((c) => (
+              <a href={c.href} {...linkAttrs(c.href)}>
+                <Icon name={c.kind} />
+                <span>{c.label}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="wrap f-bottom">
+        <span>© {new Date().getFullYear()} {site.name}</span>
+      </div>
+    </footer>
+
+    <script>
+      const root = document.documentElement;
+      const topbar = document.getElementById("topbar")!;
+      const overlay = document.getElementById("overlay")!;
+      const menuBtn = document.getElementById("menuBtn")!;
+      const menuClose = document.getElementById("menuClose")!;
+
+      // ---------- Theme ----------
+      const mq = matchMedia("(prefers-color-scheme: dark)");
+      const effectiveTheme = () => root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
+      function syncThemeButtons() {
+        const dark = effectiveTheme() === "dark";
+        document.querySelectorAll(".js-theme").forEach((b) => {
+          b.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+          b.setAttribute("title", dark ? "Light mode" : "Dark mode");
+        });
+      }
+      document.querySelectorAll(".js-theme").forEach((b) =>
+        b.addEventListener("click", () => {
+          const next = effectiveTheme() === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("gd-theme", next);
+          } catch {}
+          syncThemeButtons();
+        }),
+      );
+      mq.addEventListener("change", syncThemeButtons);
+      syncThemeButtons();
+
+      // ---------- Top bar ----------
+      const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 4);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      // ---------- Dropdowns (hover opens them on desktop; click and keyboard work everywhere) ----------
+      const groups = [...document.querySelectorAll<HTMLElement>(".nav-group")];
+      const setOpen = (g: HTMLElement, open: boolean) => {
+        g.classList.toggle("open", open);
+        g.querySelector(".nav-trigger")!.setAttribute("aria-expanded", String(open));
+      };
+      groups.forEach((g) => {
+        g.querySelector(".nav-trigger")!.addEventListener("click", () => {
+          const open = !g.classList.contains("open");
+          groups.forEach((o) => o !== g && setOpen(o, false));
+          setOpen(g, open);
+        });
+        g.addEventListener("focusout", (e) => {
+          if (!g.contains(e.relatedTarget as Node | null)) setOpen(g, false);
+        });
+      });
+      document.addEventListener("click", (e) => {
+        if (!(e.target as Element).closest(".nav-group")) groups.forEach((g) => setOpen(g, false));
+      });
+
+      // ---------- Phone menu ----------
+      let returnFocus: HTMLElement | null = null;
+      function openOverlay() {
+        returnFocus = document.activeElement as HTMLElement;
+        overlay.classList.add("open");
+        root.classList.add("no-scroll");
+        menuBtn.setAttribute("aria-expanded", "true");
+        menuClose.focus();
+      }
+      function closeOverlay() {
+        if (!overlay.classList.contains("open")) return;
+        overlay.classList.remove("open");
+        root.classList.remove("no-scroll");
+        menuBtn.setAttribute("aria-expanded", "false");
+        returnFocus?.focus({ preventScroll: true });
+      }
+      overlay.querySelectorAll(".ov-link").forEach((a, i) => ((a as HTMLElement).style.transitionDelay = `${60 + i * 30}ms`));
+      menuBtn.addEventListener("click", openOverlay);
+      menuClose.addEventListener("click", closeOverlay);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        closeOverlay();
+        const open = groups.find((g) => g.classList.contains("open"));
+        if (open) {
+          setOpen(open, false);
+          (open.querySelector(".nav-trigger") as HTMLElement).focus();
+        }
+      });
+    </script>
+  </body>
+</html>

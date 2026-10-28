@@ -1,0 +1,20 @@
+# Shown in this order. Any mix of portrait and landscape photos works: rows are packed to fit.
+photos:
+  - { src: ../assets/images/gallery/16.jpg, alt: "" }
+  - { src: ../assets/images/gallery/17.jpg, alt: "" }
+  - { src: ../assets/images/gallery/11.jpg, alt: "" }
+  - { src: ../assets/images/gallery/12.jpg, alt: "" }
+  - { src: ../assets/images/gallery/15.jpg, alt: "" }
+  - { src: ../assets/images/gallery/18.jpg, alt: "" }
+  - { src: ../assets/images/gallery/14.jpg, alt: "" }
+  - { src: ../assets/images/gallery/13.jpg, alt: "" }
+  - { src: ../assets/images/gallery/2.jpg, alt: "" }
+  - { src: ../assets/images/gallery/4.jpg, alt: "" }
+  - { src: ../assets/images/gallery/3.jpg, alt: "" }
+  - { src: ../assets/images/gallery/1.jpg, alt: "" }
+  - { src: ../assets/images/gallery/7.jpg, alt: "" }
+  - { src: ../assets/images/gallery/5.jpg, alt: "" }
+  - { src: ../assets/images/gallery/6.jpg, alt: "" }
+  - { src: ../assets/images/gallery/9.jpg, alt: "" }
+  - { src: ../assets/images/gallery/10.jpg, alt: "" }
+  - { src: ../assets/images/gallery/8.jpg, alt: "" }

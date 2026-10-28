@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import HorotekaTicket from "../components/HorotekaTicket.astro";
+import Icon from "../components/Icon.astro";
+import { getHoroteka } from "../lib/content";
+
+const h = await getHoroteka();
+---
+
+<Layout title={h.title} description={h.intro} current="/horoteka" image={h.photo.src}>
+  <section class="split-hero">
+    <div class="wrap split-hero-grid">
+      <div class="split-hero-text">
+        <span class="mark mark--start" aria-hidden="true"></span>
+        <p class="eyebrow">{h.eyebrow}</p>
+        <h1 class="display page-title">{h.title}</h1>
+        <p class="lead">{h.intro}</p>
+      </div>
+      <figure class="split-hero-media">
+        <Image src={h.photo.src} alt={h.photo.alt} widths={[480, 720, 960]} sizes="(max-width: 860px) 100vw, 50vw" loading="eager" />
+      </figure>
+    </div>
+  </section>
+  <HorotekaTicket
+    ctas={h.next.rsvp ? [{ label: "RSVP on Facebook", href: h.next.rsvp, icon: "facebook" }] : []}
+    note={h.next.rsvp ? "Optional" : undefined}
+  />
+  <section class="section">
+    <div class="wrap">
+      <h2 class="h-md">Please bring</h2>
+      <ul class="bring">
+        {
+          h.bring.map((b) => (
+            <li>
+              <span class="icon-tile">
+                <Icon name={b.icon} />
+              </span>
+              <span>{b.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

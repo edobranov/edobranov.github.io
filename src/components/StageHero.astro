@@ -1,0 +1,31 @@
+---
+// Ensemble name and tagline over (or above) a full-width group photo.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  group: CollectionEntry<"groups">["data"];
+  /** The photo has a dark top (a stage curtain): on wide screens the headline sits on it. */
+  curtain?: boolean;
+}
+const { group, curtain = false } = Astro.props;
+---
+
+<section class:list={["stage-hero", curtain ? "stage-hero--curtain" : "stage-hero--band"]} aria-labelledby="stageTitle">
+  <div class="wrap stage-copy">
+    <span class="mark" aria-hidden="true"></span>
+    <h1 class="display stage-title" id="stageTitle">{group.name}</h1>
+    <p class="stage-tag">{group.tagline}</p>
+  </div>
+  <figure class="stage-photo">
+    <Image
+      src={group.photo.src}
+      alt={group.photo.alt}
+      widths={[640, 960, 1280, 1600, 2000]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      style={!curtain && group.photo.focus ? `object-position: ${group.photo.focus}` : undefined}
+    />
+  </figure>
+</section>

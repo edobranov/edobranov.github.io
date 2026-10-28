@@ -1,0 +1,38 @@
+---
+// YouTube videos as lightweight thumbnails; the player only loads when one is clicked.
+import Icon from "./Icon.astro";
+
+interface Props {
+  videos: { id: string; title: string }[];
+}
+const { videos } = Astro.props;
+---
+
+<div class="vgrid">
+  {
+    videos.map((v) => (
+      <figure class="video">
+        <button class="yt" type="button" data-id={v.id} data-title={v.title} aria-label={`Play ${v.title}`}>
+          <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} width="480" height="360" alt="" loading="lazy" />
+          <span class="yt-play">
+            <Icon name="play" />
+          </span>
+        </button>
+        <figcaption>{v.title}</figcaption>
+      </figure>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".yt").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const f = document.createElement("iframe");
+      f.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.id}?autoplay=1`;
+      f.title = btn.dataset.title || "YouTube video";
+      f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      f.allowFullscreen = true;
+      btn.replaceWith(f);
+    }),
+  );
+</script>

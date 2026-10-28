@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
+import ConcertCard from "../components/ConcertCard.astro";
+import { getConcerts } from "../lib/content";
+
+const [newest, ...rest] = await getConcerts();
+---
+
+<Layout title="Past Concerts" current="/past-concerts" image={newest.data.image.src}>
+  <PageHead eyebrow="Archive" title="Past Concerts" />
+  <section class="section section-flush-top">
+    <div class="wrap">
+      <ConcertCard concert={newest} featured />
+      <div class="pgrid">
+        {rest.map((c) => <ConcertCard concert={c} />)}
+      </div>
+    </div>
+  </section>
+</Layout>

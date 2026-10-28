@@ -1,0 +1,79 @@
+---
+// Ticket-stub card: red date stub on the left, details in the middle, buttons on the right.
+import Icon, { type IconName } from "./Icon.astro";
+import { dateParts, linkAttrs } from "../lib/format";
+
+interface Fact {
+  icon: IconName;
+  text: string;
+  href?: string;
+  sub?: string;
+}
+interface Cta {
+  label: string;
+  href: string;
+  icon?: IconName;
+  ghost?: boolean;
+}
+interface Props {
+  date: Date;
+  eyebrow?: string;
+  title: string;
+  titleTag?: "h1" | "h2";
+  compact?: boolean;
+  sub?: string;
+  facts: Fact[];
+  ctas?: Cta[];
+  note?: string;
+}
+
+const { date, eyebrow, title, titleTag: Title = "h2", compact = false, sub, facts, ctas = [], note } = Astro.props;
+const d = dateParts(date);
+---
+
+<div class="ticket-wrap">
+  <article class:list={["ticket", { "ticket--compact": compact }]}>
+    <div class="ticket-stub">
+      <span class="ts-month">{d.month}</span>
+      <span class="ts-day">{d.day}</span>
+      <span class="ts-year">{d.year}</span>
+    </div>
+    <div class="ticket-body">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <Title class="ticket-title">{title}</Title>
+      {sub && <p class="ticket-sub">{sub}</p>}
+      <ul class="facts">
+        {
+          facts.map((f) => (
+            <li>
+              <Icon name={f.icon} />
+              <span>
+                {f.href ? (
+                  <a href={f.href} {...linkAttrs(f.href)}>
+                    {f.text}
+                  </a>
+                ) : (
+                  f.text
+                )}
+                {f.sub && <span class="fact-sub">{f.sub}</span>}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    {
+      (ctas.length > 0 || note) && (
+        <div class="ticket-cta">
+          {ctas.map((b) => (
+            <a class:list={["btn", b.ghost ? "btn-ghost" : "btn-primary"]} href={b.href} {...linkAttrs(b.href)}>
+              {b.icon && <Icon name={b.icon} />}
+              {b.label}
+            </a>
+          ))}
+          {note && <span class="ticket-note">{note}</span>}
+        </div>
+      )
+    }
+  </article>
+</div>

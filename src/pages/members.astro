@@ -1,0 +1,83 @@
+---
+// Members-only resources. Not linked from the menu. The build encrypts this page with the shared
+// members password (see scripts/encrypt-members.mjs), so its contents are never published in
+// readable form. The calendar and links come from secrets, not from this public repository.
+import { MEMBERS_CALENDAR, MEMBERS_LINKS, MEMBERS_PASSWORD } from "astro:env/server";
+import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
+import Icon from "../components/Icon.astro";
+import { calendarEmbeds, parseLinks } from "../lib/members";
+
+// Without a password the page can't be encrypted, so it must not contain the real content.
+const locked = Boolean(MEMBERS_PASSWORD);
+const calendar = locked && MEMBERS_CALENDAR ? calendarEmbeds(MEMBERS_CALENDAR) : null;
+const links = locked && MEMBERS_LINKS ? parseLinks(MEMBERS_LINKS) : [];
+const ready = calendar || links.length > 0;
+---
+
+<Layout title="Member Resources" current="/members" noindex>
+  <PageHead
+    eyebrow="Internal only"
+    title="Member Resources"
+    lead={ready ? "Contact Evgeni by text or WhatsApp if you have questions." : undefined}
+  />
+  {
+    !ready && (
+      <section class="section section-flush-top">
+        <div class="wrap">
+          <p class="page-lead">This page isn't set up yet.</p>
+        </div>
+      </section>
+    )
+  }
+  {
+    links.length > 0 && (
+      <section class="section-tight section-flush-top">
+        <div class="wrap">
+          <h2 class="h-md members-title">Material</h2>
+          <div class="res-grid">
+            {links.map((l) => (
+              <a class="res-card" href={l.href} target="_blank" rel="noopener">
+                <span class="icon-tile">
+                  <Icon name={l.isDrive ? "folder" : "link"} />
+                </span>
+                <span class="res-text">
+                  <b>{l.label}</b>
+                  <small>{l.isDrive ? "Google Drive" : l.host}</small>
+                </span>
+                <Icon name="arrow" class="res-go" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+  {
+    calendar && (
+      <section class="section-tight">
+        <div class="wrap">
+          <h2 class="h-md members-title">Calendar</h2>
+          <div class="cal-frame">
+            <iframe id="membersCalendar" title="GORANA DANCE calendar" data-month={calendar.month} data-agenda={calendar.agenda} />
+          </div>
+          <script is:inline>
+            // A month grid is unreadable on a phone; show the agenda list there instead.
+            const cal = document.getElementById("membersCalendar");
+            cal.src = matchMedia("(max-width: 700px)").matches ? cal.dataset.agenda : cal.dataset.month;
+          </script>
+        </div>
+      </section>
+    )
+  }
+  {
+    ready && (
+      <div class="wrap members-lock">
+        <a href="/members?staticrypt_logout">
+          <Icon name="lock" />
+          Lock this page on this device
+        </a>
+      </div>
+    )
+  }
+</Layout>

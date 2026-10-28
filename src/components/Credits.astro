@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { splitRole } from "../lib/format";
+
+interface Props {
+  concert: CollectionEntry<"concerts">["data"];
+}
+const { credits } = Astro.props.concert;
+---
+
+<section class="section section-alt" id="credits">
+  <div class="wrap">
+    <h2 class="h-md">Credits</h2>
+    <div class="credits">
+      {
+        credits.map((g) => (
+          <section class="cgroup">
+            <h3>{g.title}</h3>
+            <ul>
+              {g.people.map((p) => {
+                const { name, role } = splitRole(p);
+                return (
+                  <li>
+                    {name}
+                    {role && <span class="role">{role}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+            {g.note && <p class="cgroup-note">{g.note}</p>}
+          </section>
+        ))
+      }
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-ghost" href="/past-concerts"><Icon name="chevL" />All past concerts</a>
+    </div>
+  </div>
+</section>

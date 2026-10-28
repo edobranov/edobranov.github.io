@@ -1,0 +1,4 @@
+# YouTube video IDs: the part after "watch?v=" or "youtu.be/".
+trailers:
+  - { id: 6vYgV40Sqqk, title: Trailer 1 }
+  - { id: Hqi7vgZkchQ, title: Trailer 2 }

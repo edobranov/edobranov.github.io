@@ -1,0 +1,20 @@
+name: GORANA DANCE
+description: GORANA DANCE is a Bulgarian folk dance collective in New York City, founded in 2006. Concerts, monthly horoteka dance nights and more.
+footer: Bulgarian folk dance collective in New York City, founded in 2006.
+
+nav:
+  - label: About
+    children:
+      - { label: Gorana Dance, href: / }
+      - { label: Algara Dance, href: /about-algara }
+  - { label: Horoteka, href: /horoteka }
+  - { label: Gallery, href: /gallery }
+  - { label: Trailers, href: /trailers }
+  - { label: Past Concerts, href: /past-concerts }
+
+contact:
+  - { kind: instagram, label: instagram.com/goranadancenyc, href: "https://www.instagram.com/goranadancenyc" }
+  - { kind: tiktok, label: tiktok.com/@gorana.dance, href: "https://www.tiktok.com/@gorana.dance" }
+  - { kind: facebook, label: facebook.com/goranadance, href: "https://www.facebook.com/goranadance" }
+  - { kind: email, label: eleadance@yahoo.com, href: "mailto:eleadance@yahoo.com" }
+  - { kind: donate, label: Donate to the collective, href: "https://app.thefield.org/profile/Elissaveta-Iordanova-ELEA-GORANA-DANCE-COLLECTIVE/550476" }

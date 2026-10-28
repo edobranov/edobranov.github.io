@@ -1,0 +1,88 @@
+---
+// One page per file in src/content/concerts, at /<file name> (e.g. /orenda).
+import type { GetStaticPaths } from "astro";
+import { Image, getImage } from "astro:assets";
+import { render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Ticket from "../components/Ticket.astro";
+import Icon from "../components/Icon.astro";
+import Guests from "../components/Guests.astro";
+import Lineup from "../components/Lineup.astro";
+import Credits from "../components/Credits.astro";
+import { getConcerts } from "../lib/content";
+import { longDate, year } from "../lib/format";
+
+export const getStaticPaths = (async () =>
+  (await getConcerts()).map((concert) => ({ params: { concert: concert.id }, props: { concert } }))) satisfies GetStaticPaths;
+
+const { concert } = Astro.props;
+const c = concert.data;
+const { Content } = await render(concert);
+const blur = (await getImage({ src: c.image.src, width: 640, format: "webp" })).src;
+---
+
+<Layout title={c.title} description={c.summary} current="/past-concerts" image={c.image.src}>
+  <section class="hero" aria-label={c.title}>
+    <div class="hero-bg-clip" aria-hidden="true"><div class="hero-bg" style={`background-image: url('${blur}')`}></div></div>
+    <div class="wrap-wide hero-back">
+      <a class="back-link" href="/past-concerts"><Icon name="chevL" />Past Concerts</a>
+    </div>
+    <div class="wrap-wide hero-inner">
+      <Image
+        class:list={["hero-media", { "hero-media--poster": c.poster }]}
+        src={c.image.src}
+        alt={c.image.alt}
+        widths={[480, 800, 1180, 1600, 2000]}
+        sizes="(max-width: 1240px) 100vw, 1180px"
+        loading="eager"
+        fetchpriority="high"
+        style={`--ar: ${c.image.src.width / c.image.src.height}`}
+      />
+    </div>
+  </section>
+  <div class="wrap ticket-overlap">
+    <Ticket
+      titleTag="h1"
+      date={c.date}
+      eyebrow={`Past concert · ${year(c.date)}`}
+      title={c.title}
+      sub={c.kicker ?? c.subtitle}
+      facts={[
+        { icon: "cal", text: `Performed ${longDate(c.date)}` },
+        ...(c.time ? [{ icon: "clock" as const, text: c.time }] : []),
+        { icon: "pin", text: c.venue, href: c.map, sub: c.address },
+      ]}
+    />
+  </div>
+  {
+    c.poem.length > 0 && (
+      <section class="poem">
+        <div class="wrap narrow">
+          <span class="mark" aria-hidden="true" />
+          {c.subtitle && <h2 class="eyebrow">{c.subtitle}</h2>}
+          <p class="poem-lines">
+            {c.poem.map((l) => (
+              <span>{l}</span>
+            ))}
+          </p>
+        </div>
+      </section>
+    )
+  }
+  <section class="section section-flush-top invite">
+    <div class="wrap split">
+      <h2 class="display h-xl">About the concert</h2>
+      <div>
+        <div class="md"><Content /></div>
+        <div class="btn-row">
+          {c.guests.length > 0 && <a class="btn btn-ghost" href="#guests">Guest artists</a>}
+          <a class="btn btn-primary" href="#program">Lineup <Icon name="arrow" /></a>
+          <a class="btn btn-ghost" href="#credits">Credits</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <Guests concert={c} />
+  <Lineup concert={c} />
+  <Credits concert={c} />
+</Layout>

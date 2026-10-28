@@ -1,0 +1,86 @@
+---
+// The About text, the leader's bio and the member list of an ensemble, in that order.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { splitRole } from "../lib/format";
+
+interface Props {
+  group: CollectionEntry<"groups">["data"];
+}
+const { group } = Astro.props;
+const { leader } = group;
+---
+
+<section class="section">
+  <div class="wrap">
+    <div class="prose">
+      <h2 class="h-md intro-title">About {group.name}</h2>
+      {group.about.map((p, i) => <p class:list={{ lead: i === 0 }}>{p}</p>)}
+      {group.socialIntro && <p class="social-intro">{group.socialIntro}</p>}
+      {
+        group.social.length > 0 && (
+          <ul class="social">
+            {group.social.map((s) => (
+              <li>
+                <a class="btn btn-ghost btn-sm" href={s.href} target="_blank" rel="noopener">
+                  <Icon name={s.kind} />
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        group.callout && (
+          <a class="callout" href={group.callout.href}>
+            <Icon name="users" />
+            <span>{group.callout.text}</span>
+            <Icon name="arrow" />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="wrap leader-grid">
+    <figure class="leader-photo">
+      <Image
+        src={leader.photo.src}
+        alt={leader.photo.alt}
+        widths={[400, 600, 800]}
+        sizes="(max-width: 860px) 400px, 42vw"
+        style={leader.photo.focus ? `object-position: ${leader.photo.focus}` : undefined}
+      />
+    </figure>
+    <div class="leader-text">
+      <p class="eyebrow">{leader.role}</p>
+      <h2 class="display h-lg">{leader.name}</h2>
+      {leader.bio.map((p) => <p>{p}</p>)}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="h-md roster-head">Members</h2>
+    <ul class="chips">
+      {
+        group.members.map((m) => {
+          const { name, role } = splitRole(m);
+          return role ? (
+            <li class="chip chip--lead">
+              {name}
+              <small>{role}</small>
+            </li>
+          ) : (
+            <li class="chip">{name}</li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

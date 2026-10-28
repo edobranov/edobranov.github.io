@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
+import VideoGrid from "../components/VideoGrid.astro";
+import { getVideos } from "../lib/content";
+
+const { trailers } = await getVideos();
+---
+
+<Layout title="Trailers" current="/trailers">
+  <PageHead eyebrow="Videos" title="Trailers" />
+  <section class="section section-flush-top">
+    <div class="wrap"><VideoGrid videos={trailers} /></div>
+  </section>
+</Layout>

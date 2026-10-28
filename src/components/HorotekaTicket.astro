@@ -1,0 +1,26 @@
+---
+// The next horoteka night as a ticket. The home page and the Horoteka page differ only in buttons.
+import type { ComponentProps } from "astro/types";
+import Ticket from "./Ticket.astro";
+import { getHoroteka } from "../lib/content";
+import { longDate } from "../lib/format";
+
+type Props = Pick<ComponentProps<typeof Ticket>, "ctas" | "note">;
+
+const h = await getHoroteka();
+---
+
+<div class="wrap ticket-overlap">
+  <Ticket
+    date={h.next.date}
+    compact
+    title="Next Horoteka Night"
+    facts={[
+      { icon: "cal", text: longDate(h.next.date) },
+      { icon: "clock", text: h.next.time },
+      { icon: "pin", text: h.venue, href: h.map, sub: h.address },
+      { icon: "cash", text: `${h.price} admission` },
+    ]}
+    {...Astro.props}
+  />
+</div>

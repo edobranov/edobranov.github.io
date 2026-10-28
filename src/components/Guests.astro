@@ -1,0 +1,44 @@
+---
+// Each guest: their bio on the left, their photos stacked on the right.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { markdown } from "../lib/format";
+
+interface Props {
+  concert: CollectionEntry<"concerts">["data"];
+}
+const { guests } = Astro.props.concert;
+---
+
+{
+  guests.length > 0 && (
+    <section class="section section-flush-top" id="guests">
+      <div class="wrap">
+        <h2 class="h-md">Guest Artists</h2>
+        <div class="guests">
+          {guests.map((g) => (
+            <article class="guest">
+              <div class="guest-text">
+                <h3>{g.name}</h3>
+                <div class="md" set:html={markdown(g.about)} />
+              </div>
+              {g.photos.length > 0 && (
+                <div class:list={["guest-media", { "guest-media--stack": g.photos.length > 1 }]}>
+                  {g.photos.map((p) => (
+                    <Image
+                      src={p.src}
+                      alt={p.alt}
+                      widths={[360, 560, 800]}
+                      sizes="(max-width: 860px) 100vw, 480px"
+                      style={`--ar: ${p.src.width / p.src.height}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

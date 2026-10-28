@@ -1,0 +1,38 @@
+name: Algara Folk Dance Group
+tagline: Bulgarian folk dance in New Jersey since 2018
+photo:
+  src: ../../assets/images/algara.jpg
+  alt: Algara Folk Dance Group in black and red costumes in a park
+  focus: 50% 30%
+
+about:
+  - Algara Folk Dance Group is a Bulgarian folk dance collective founded in 2018 by Galina Saharova and a group of enthusiastic Bulgarian women living in New Jersey. The group's goal is to present their appreciation of Bulgarian folk traditions to larger audiences. The group performs at festivals in New York, New Jersey, Pennsylvania and Illinois.
+
+leader:
+  name: Galina Saharova
+  role: Founder & Choreographer
+  photo:
+    src: ../../assets/images/galina.jpg
+    alt: Portrait of Galina Saharova
+    focus: 50% 30%
+  bio:
+    - Galina's dance experience comes from dancing and performing with her children's group "Guslarche" in her town of Gorna Oryahovitsa in Bulgaria. She joined GORANA DANCE in 2010 as a dancer before becoming Elissaveta's assistant folk dance teacher. Together, they taught K-12 Bulgarian-American students.
+    - In 2018, Galina took over teaching the student group and also founded the Algara Folk Dance Group. She is the choreographer of Algara's repertoire as well as a dancer in both Algara and GORANA DANCE.
+
+# Alphabetical by last name.
+members:
+  - Maria Bonevelly
+  - Albena Chernaeva
+  - Vessela Djogova
+  - Virginiya Grigorova
+  - Bisera Iliev
+  - Krasimira Mladenova
+  - Inna Ognianova-Chorlev
+  - Vessela Patchedjieva
+  - Maria Rosenberg
+  - Galina Saharova (Choreographer)
+  - Iskra Simidchieva
+  - Toska Stoianova
+  - Kalina Todorova-Suarez
+  - Tanya Vergieva
+  - Irena Zane

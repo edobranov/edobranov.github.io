@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import StageHero from "../components/StageHero.astro";
+import GroupSections from "../components/GroupSections.astro";
+import { getGroup } from "../lib/content";
+
+const algara = await getGroup("algara");
+---
+
+<Layout title={algara.name} description={algara.about[0]} current="/about-algara" image={algara.photo.src}>
+  <StageHero group={algara} />
+  <GroupSections group={algara} />
+</Layout>

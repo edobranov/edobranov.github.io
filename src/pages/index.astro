@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+import StageHero from "../components/StageHero.astro";
+import HorotekaTicket from "../components/HorotekaTicket.astro";
+import GroupSections from "../components/GroupSections.astro";
+import TeaserCard from "../components/TeaserCard.astro";
+import { getConcerts, getGallery, getGroup, getHoroteka } from "../lib/content";
+import { longDate, year } from "../lib/format";
+
+const gorana = await getGroup("gorana");
+const h = await getHoroteka();
+const gallery = await getGallery();
+const concerts = await getConcerts();
+const newest = concerts[0].data;
+const oldest = concerts[concerts.length - 1].data;
+---
+
+<Layout current="/" image={gorana.photo.src}>
+  <StageHero group={gorana} curtain />
+  <HorotekaTicket
+    ctas={[
+      { label: "More details", href: "/horoteka", icon: "users" },
+      ...(h.next.rsvp ? [{ label: "RSVP", href: h.next.rsvp, icon: "facebook" as const, ghost: true }] : []),
+    ]}
+  />
+  <GroupSections group={gorana} />
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head"><h2 class="h-md">Explore</h2></div>
+      <div class="cards3">
+        <TeaserCard href="/horoteka" photo={h.photo} title={h.title} meta={`Next: ${longDate(h.next.date)}`} />
+        <TeaserCard href="/gallery" photo={gallery[0]} title="Gallery" meta={`${gallery.length} photos`} />
+        <TeaserCard
+          href="/past-concerts"
+          photo={newest.image}
+          contain={newest.poster}
+          title="Past Concerts"
+          meta={`${concerts.length} concerts · ${year(oldest.date)}–${year(newest.date)}`}
+        />
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+dist/
+.astro/
+# Local copies of the members page secrets
+.env
+.env.*
+# Claude Code settings for this computer
+.claude/

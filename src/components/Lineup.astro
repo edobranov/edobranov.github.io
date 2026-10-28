@@ -1,0 +1,62 @@
+---
+// A concert program: every dance shown in full, numbered in performance order.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { inlineMarkdown, splitCredit } from "../lib/format";
+
+interface Props {
+  concert: CollectionEntry<"concerts">["data"];
+}
+const { lineup } = Astro.props.concert;
+---
+
+<section class="section-tight section-flush-top" id="program">
+  <div class="wrap">
+    <h2 class="h-md list-head">Lineup</h2>
+    <ol class="timeline">
+      {
+        lineup.map((d, i) => (
+          <li class="tl-item">
+            <div class="tl-head">
+              <span class="tl-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3 class="tl-names">
+                <span class="tl-title">{d.title}</span>
+                {d.performer && <span class="tl-performer">{d.performer}</span>}
+              </h3>
+            </div>
+            <div class="tl-body">
+              {d.description?.split(/\n\s*\n/).map((p) => <p set:html={inlineMarkdown(p)} />)}
+              {d.note && <p class="tl-note" set:html={inlineMarkdown(d.note)} />}
+              {d.credits.length > 0 && (
+                <dl class="tl-meta">
+                  {d.credits.map((line) => {
+                    const { label, value } = splitCredit(line);
+                    return (
+                      <div>
+                        {label && <dt>{label}</dt>}
+                        <dd>{value}</dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              )}
+              {d.photo && (
+                <figure class="tl-photo">
+                  <Image
+                    src={d.photo.src}
+                    alt={d.photo.alt}
+                    widths={[320, 640]}
+                    sizes="320px"
+                    style={`--ar: ${d.photo.src.width / d.photo.src.height}`}
+                  />
+                </figure>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

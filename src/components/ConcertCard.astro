@@ -1,0 +1,42 @@
+---
+// A past concert on the archive page. "featured" is the wide card for the most recent one.
+import { Image, getImage } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+import { concertHref } from "../lib/content";
+import { longDate, year } from "../lib/format";
+
+interface Props {
+  concert: CollectionEntry<"concerts">;
+  featured?: boolean;
+}
+const { concert, featured = false } = Astro.props;
+const c = concert.data;
+const blur = (await getImage({ src: c.image.src, width: 480, format: "webp" })).src;
+---
+
+<a class={featured ? "pfeature" : "pcard"} href={concertHref(concert.id)}>
+  <div class={featured ? "pfeature-media" : "pcard-media"}>
+    <div class="blur-bg" style={`background-image: url('${blur}')`} aria-hidden="true"></div>
+    <Image
+      src={c.image.src}
+      alt={c.image.alt}
+      widths={featured ? [640, 960, 1280] : [400, 600, 800]}
+      sizes={featured ? "(max-width: 860px) 100vw, 680px" : "(max-width: 640px) 100vw, 380px"}
+      loading={featured ? "eager" : "lazy"}
+      style={`--ar: ${c.image.src.width / c.image.src.height}`}
+    />
+  </div>
+  <div class="pcard-body">
+    {featured && <span class="badge">Most recent</span>}
+    <span class="pcard-year" aria-hidden="true">{year(c.date)}</span>
+    <h2>{c.title}</h2>
+    {c.subtitle && <p class="pcard-sub">{c.subtitle}</p>}
+    <div class="pcard-meta">
+      <span><Icon name="cal" />{longDate(c.date)}</span>
+      <span><Icon name="pin" />{c.venue}</span>
+    </div>
+    <p class="pcard-blurb">{c.summary}</p>
+    <span class="more">Program &amp; credits <Icon name="arrow" /></span>
+  </div>
+</a>

@@ -1,0 +1,29 @@
+---
+import { Image, getImage } from "astro:assets";
+import Icon from "./Icon.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  meta: string;
+  photo: { src: ImageMetadata; alt: string };
+  /** Show the whole image (a poster) on a blurred copy of itself instead of cropping it. */
+  contain?: boolean;
+}
+const { href, title, meta, photo, contain = false } = Astro.props;
+const blur = contain ? (await getImage({ src: photo.src, width: 480, format: "webp" })).src : undefined;
+---
+
+<a class="tcard" href={href}>
+  <div class:list={["tcard-media", { "tcard-media--contain": contain }]}>
+    {blur && <div class="blur-bg" style={`background-image: url('${blur}')`} aria-hidden="true" />}
+    <Image src={photo.src} alt={photo.alt} widths={[400, 600, 800]} sizes="(max-width: 860px) 100vw, 33vw" />
+  </div>
+  <div class="tcard-body">
+    <div>
+      <h3>{title}</h3>
+      <p>{meta}</p>
+    </div>
+    <span class="tcard-go"><Icon name="arrow" /></span>
+  </div>
+</a>

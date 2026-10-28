@@ -1,0 +1,59 @@
+name: GORANA DANCE
+tagline: Bulgarian folk dance in New York City since 2006
+photo:
+  src: ../../assets/images/gorana3.jpg
+  alt: The GORANA DANCE ensemble in costume on stage
+
+about:
+  - GORANA DANCE is a Bulgarian folk dance collective founded in 2006 by Elissaveta Iordanova. The collective's style is characterized by lively energy, swift steps and exciting interpretation of the traditional Bulgarian folk dance form.
+  - Its mission is presenting Bulgarian folk dance art, making connections with communities beyond the Bulgarian one, collaborating with Bulgarian & intercultural folk artists, and serving as a cultural ambassador while being a vital part of the multicultural tapestry of NYC.
+  - GORANA DANCE has been presenting annual concerts for 20+ years and performing on different occasions like festivals in the greater NYC, New Jersey, Pennsylvania and Chicago areas.
+
+socialIntro: Follow us on social media to stay up to date!
+social:
+  - { kind: instagram, label: Instagram, href: "https://www.instagram.com/goranadancenyc" }
+  - { kind: tiktok, label: TikTok, href: "https://www.tiktok.com/@gorana.dance" }
+  - { kind: facebook, label: Facebook, href: "https://www.facebook.com/goranadance" }
+
+callout:
+  text: Come join us for our monthly horoteka nights in NYC!
+  href: /horoteka
+
+leader:
+  name: Elissaveta Iordanova
+  role: Founder, Artistic Director & Choreographer
+  photo:
+    src: ../../assets/images/ellie.jpg
+    alt: Portrait of Elissaveta Iordanova
+    focus: 38% 30%
+  bio:
+    - Elissaveta is a dance artist and choreographer with professional experience, long-lasting interest & specialty in Bulgarian folk dance, and in-depth knowledge of Bulgarian folkloric heritage.
+    - She is the founder, artistic director and choreographer of the GORANA DANCE Collective, uniting several generations of Bulgarian and American dancers around the captivating power of traditional folklore music & dance.
+    - Elissaveta is a recipient of LMCC grants and her collective has also been supported by the Tienaderrah Foundation and private donors.
+
+# Alphabetical by last name.
+members:
+  - Eleonora Andreeva
+  - Cvetelina Atanasova
+  - Mariya Dimitrova
+  - Chavdar Dobranov
+  - Evgeni Dobranov
+  - Angelika Glogov
+  - Lily Grantcharova
+  - Vivian Gueorguieva
+  - Jianying Hu
+  - Elissaveta Iordanova (Choreographer)
+  - Iva Iordanova
+  - Assia Mihov
+  - Hristo Mihovski
+  - Elena Miteva
+  - Inna Ognianova-Chorlev
+  - Nadia Petkova
+  - Venci Petkova
+  - Emilia Pironkova
+  - Galina Saharova
+  - Tsvetina Stoyanova
+  - Guergana Stoyantcheva
+  - Mihaela Stoyantcheva
+  - Ana Vasileva
+  - Gannie Tzoneva

@@ -1,0 +1,25 @@
+title: Horoteka Nights
+eyebrow: Monthly · New York City
+intro: GORANA DANCE is hosting a monthly horoteka series in NYC! These are guided dance nights open to dancers of all levels and backgrounds. Come join us for a fun night of unique Bulgarian folk dances and community, even if you're brand new!
+photo:
+  src: ../assets/images/horoteka.jpg
+  alt: Dancers posing together at a horoteka night
+
+# Update this block for each horoteka. The date drives the red date stub on the home page.
+next:
+  date: 2026-11-13
+  time: 6:00 PM – 8:30 PM
+  rsvp: https://www.facebook.com/share/19scfsVGWs/
+
+price: $25 cash
+venue: KTown Dance Studio
+address: 38 W 32nd St (4th floor), New York, NY 10001
+map: https://maps.app.goo.gl/4BTFrVdjDSCTNipc9
+
+bring:
+  - icon: cash
+    text: $25 in cash for admission
+  - icon: shoes
+    text: Comfortable shoes
+  - icon: snacks
+    text: Light snacks & refreshments are provided

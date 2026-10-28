@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
+import Gallery from "../components/Gallery.astro";
+import { getGallery } from "../lib/content";
+
+const photos = await getGallery();
+---
+
+<Layout title="Gallery" current="/gallery" image={photos[0].src}>
+  <PageHead eyebrow="Photos" title="Gallery" lead={`${photos.length} photos · select any photo to view it in full size`} />
+  <section class="section section-flush-top">
+    <div class="wrap-wide">
+      <Gallery photos={photos} />
+    </div>
+  </section>
+</Layout>
